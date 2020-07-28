@@ -7,14 +7,24 @@ import com.example.tvbox.pojo.data.ScrapeData;
 import com.example.tvbox.pojo.modules.ShowModule;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MainViewModel extends ViewModel {
-    private ScrapeData scrapeData = new ScrapeData();
+    private static final String TAG = "MainViewModel";
 
     public MutableLiveData<ArrayList<ShowModule>> mutableLiveData = new MutableLiveData<>();
+    private ScrapeData scrapeData = new ScrapeData();
 
-    public void getShowData(){
+    public void execute() throws InterruptedException {
         scrapeData.execute();
+        boolean isEmpty = true ;
+        while (isEmpty){
+            if (scrapeData.getShowList().size() == 0){
+                TimeUnit.MICROSECONDS.sleep(10);
+            }else {
+                isEmpty = false;
+            }
+        }
         mutableLiveData.setValue(getDataFromWeb());
     }
 

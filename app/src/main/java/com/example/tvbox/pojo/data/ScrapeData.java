@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.tvbox.pojo.modules.ShowModule;
-import com.example.tvbox.pojo.services.translation.Translator;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,7 +18,6 @@ public class ScrapeData extends AsyncTask<Void,Void,Void> {
     protected Void doInBackground(Void... voids) {
         String url =
                 "https://www.teleman.pl/program-tv/stacje/Eleven-Sports-1";
-        Translator translator = new Translator();
         try {
             final Document document = Jsoup.connect(url).get();
             Element element, element2, element3;
@@ -47,7 +45,9 @@ public class ScrapeData extends AsyncTask<Void,Void,Void> {
                     continue;
                 }
             }
-
+            for (ShowModule s : showList){
+                Log.d(TAG, "doInBackground: "+s.getName()+s.getTime()+s.getTitle());
+            }
         } catch (Exception ex) {
             Log.d(TAG, "doInBackground: " + ex);
         }
