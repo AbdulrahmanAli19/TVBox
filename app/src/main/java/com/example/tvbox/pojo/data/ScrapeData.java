@@ -1,19 +1,25 @@
-package com.example.tvbox.pojo.services;
+package com.example.tvbox.pojo.data;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.example.tvbox.pojo.modules.ShowModule;
+import com.example.tvbox.pojo.services.translation.Translator;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.util.ArrayList;
+
 public class ScrapeData extends AsyncTask<Void,Void,Void> {
     private static final String TAG = ScrapeData.class.getSimpleName();
-
+    private ArrayList<ShowModule> showList = new ArrayList<>();
     @Override
     protected Void doInBackground(Void... voids) {
         String url =
                 "https://www.teleman.pl/program-tv/stacje/Eleven-Sports-1";
+        Translator translator = new Translator();
         try {
             final Document document = Jsoup.connect(url).get();
             Element element, element2, element3;
@@ -27,8 +33,7 @@ public class ScrapeData extends AsyncTask<Void,Void,Void> {
                     element = doc.select(show).first();
                     element2 = doc.select(title).first();
                     element3 = doc.select(time).first();
-                   // showModuls.add(new ShowModul(element.text(), element2.text(), element3.text()));
-                    System.out.println(element.text() + " " + element2.text() + " " + element3.text());
+                    showList.add(new ShowModule(element.text(), element2.text(), element3.text()));
                 } else if(doc.className().equals("cat-dok")) {
                     show = ".detail a";
                     title = ".detail .genre";
@@ -36,8 +41,8 @@ public class ScrapeData extends AsyncTask<Void,Void,Void> {
                     element = doc.select(show).first();
                     element2 = doc.select(title).first();
                     element3 = doc.select(time).first();
-                   // showModuls.add(new ShowModul(element.text(), element2.text(), element3.text()));
-                    System.out.println(element.text() + " " + element2.text() + " " + element3.text());
+                    showList.add(new ShowModule(element.text(), element2.text(), element3.text()));
+
                 }else {
                     continue;
                 }
@@ -48,5 +53,10 @@ public class ScrapeData extends AsyncTask<Void,Void,Void> {
         }
         return null;
     }
+
+    public ArrayList<ShowModule> getShowList() {
+        return showList;
+    }
+
 }
 

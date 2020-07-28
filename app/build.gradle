@@ -10,7 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.show_info.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -43,8 +43,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.show_info.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.show_info.espresso:espresso-core:3.2.0'
     //CardView
     implementation "androidx.cardview:cardview:1.0.0"
     //web scraping

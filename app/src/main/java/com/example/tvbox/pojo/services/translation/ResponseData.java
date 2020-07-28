@@ -1,6 +1,4 @@
-package com.example.tvbox.pojo.services;
-
-import com.example.tvbox.pojo.TranslateModule;
+package com.example.tvbox.pojo.services.translation;
 
 public class ResponseData {
     TranslateModule responseData;

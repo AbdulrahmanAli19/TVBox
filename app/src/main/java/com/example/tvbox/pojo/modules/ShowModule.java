@@ -1,15 +1,16 @@
-package com.example.tvbox.pojo;
+package com.example.tvbox.pojo.modules;
 
-public class ShowModul {
+public class ShowModule {
     private String name;
     private String title;
     private String time;
 
-    public ShowModul(String name, String title, String time) {
+    public ShowModule(String name, String title, String time) {
         this.name = name;
         this.title = title;
         this.time = time;
     }
+
 
     public String getName() {
         return name;

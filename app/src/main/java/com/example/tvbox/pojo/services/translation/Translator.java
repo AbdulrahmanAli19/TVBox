@@ -1,8 +1,6 @@
 package com.example.tvbox.pojo.services.translation;
 
-import android.util.Log;
-
-import com.example.tvbox.pojo.services.ResponseData;
+import androidx.lifecycle.MutableLiveData;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -11,39 +9,33 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Translator {
+    private static final String TAG = "Translator";
+    private final MutableLiveData<ResponseData> listOfMovies = new MutableLiveData<ResponseData>();
 
-    private static final String TAG = Translator.class.getSimpleName();
-
-    public void translate(String title){
-        System.out.println("hii");
+    public MutableLiveData<ResponseData> translate (String title, String language) {
 
         String baseUrl = "https://api.mymemory.translated.net/get?q=";
 
-        String language = "&langpair=pl|ar";
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.mymemory.translated.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-
-        Call<ResponseData> call ;
-
-        call = apiInterface.getTranslatedTitle(baseUrl+title+language);
-
+        ApiTranslatorInterface apiInterface = retrofit.create(ApiTranslatorInterface.class);
+        Call<ResponseData> call = apiInterface
+                .getTranslatedTitle(baseUrl + title + "&langpair=pl|" + language);
         call.enqueue(new Callback<ResponseData>() {
-
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
-                Log.d(TAG, "onResponse: "+response.body().getResponseData()
-                        .getTranslatedText());
+                listOfMovies.setValue(response.body());
             }
 
             @Override
             public void onFailure(Call<ResponseData> call, Throwable t) {
-                Log.d(TAG, "onFailure: "+t.getMessage());
+                listOfMovies.postValue(null);
             }
         });
+        return listOfMovies;
     }
 }

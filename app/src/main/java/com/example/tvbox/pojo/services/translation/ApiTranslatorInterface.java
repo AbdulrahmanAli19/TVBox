@@ -1,14 +1,11 @@
 package com.example.tvbox.pojo.services.translation;
 
-import com.example.tvbox.pojo.services.ResponseData;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Url;
 
 
-interface ApiInterface {
+public interface ApiTranslatorInterface {
     @GET()
     Call<ResponseData> getTranslatedTitle(@Url() String Url);
-
 }
