@@ -19,17 +19,15 @@ public class ScrapeData extends AsyncTask<Void, Void, Void> {
     private ArrayList<ShowModule> showList = new ArrayList<>();
     private Translator translator = new Translator();
     private Translator translator1 = new Translator();
-
+    private boolean isDataReady = false ;
     @Override
     protected Void doInBackground(Void... voids) {
-        String url =
-                "https://www.teleman.pl/program-tv/stacje/Eleven-Sports-1";
+        String url = "https://www.teleman.pl/program-tv/stacje/Eleven-Sports-1";
         try {
             final Document document = Jsoup.connect(url).get();
-            Element element, element2, element3;
-            String selector = "ul.stationItems li";
-            String show, title, time;
-            for (Element doc : document.select(selector)) {
+            for (Element doc : document.select("ul.stationItems li")) {
+                Element element, element2, element3;
+                String show, title, time;
                 if (doc.className().equals("ad")) {
                     continue;
                 } else {
@@ -40,30 +38,29 @@ public class ScrapeData extends AsyncTask<Void, Void, Void> {
                     element2 = doc.select(title).first();
                     element3 = doc.select(time).first();
                     showList.add(new ShowModule(element.text(), element2.text(), element3.text()));
-                    translator.translate(element.text(), "ar");
+                    translator.translate(element.text().replace("#",""), "en");
+                    translator1.translate(element2.text(), "en");
+                    TimeUnit.MICROSECONDS.sleep(100);
                 }
             }
             boolean isEmpty = true;
             while (isEmpty) {
-                if (translator.getListOfMovies().size() == 0) {
-                    TimeUnit.SECONDS.sleep(1);
+                if (translator.getListOfMovies().size() == 0 || translator1.getListOfMovies().size() == 0) {
+                    TimeUnit.MICROSECONDS.sleep(1500);
                 } else {
                     isEmpty = false;
                 }
             }
-            for (int i = 0; i <= showList.size() - 1; i++) {
+            for (int i = 0; i <= showList.size(); i++) {
                 String translatedName = translator.getListOfMovies()
                         .get(i).getResponseData().getTranslatedText();
-                //String translatedTitle = translator1.getListOfMovies()
-                       // .get(i).getResponseData().getTranslatedText();
-                String name1 = showList.get(i).getName();
-                String title1 = showList.get(i).getTitle();
-                String time1 = showList.get(i).getTime();
-                showList.set(i, new ShowModule(translatedName, title1, time1));
+                String translatedTitle = translator1.getListOfMovies()
+                        .get(i).getResponseData().getTranslatedText();
+                String title = showList.get(i).getTitle();
+                String time = showList.get(i).getTime();
+                showList.set(i, new ShowModule(translatedName, translatedTitle, time));
             }
-            for (ResponseData s : translator.getListOfMovies()) {
-                Log.d(TAG, "doInBackground: " + s.getResponseData().getTranslatedText());
-            }
+            isDataReady = true ;
         } catch (Exception ex) {
             Log.d(TAG, "doInBackground: " + ex);
         }
@@ -74,5 +71,8 @@ public class ScrapeData extends AsyncTask<Void, Void, Void> {
         return showList;
     }
 
+    public boolean isDataReady() {
+        return isDataReady;
+    }
 }
 
