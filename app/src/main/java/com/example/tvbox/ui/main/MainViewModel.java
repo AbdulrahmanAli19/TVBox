@@ -20,7 +20,7 @@ public class MainViewModel extends ViewModel {
         boolean isEmpty = true ;
         while (isEmpty){
             if (scrapeData.getShowList().size() == 0){
-                TimeUnit.MICROSECONDS.sleep(10);
+                TimeUnit.SECONDS.sleep(1);
             }else {
                 isEmpty = false;
             }

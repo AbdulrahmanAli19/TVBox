@@ -1,6 +1,6 @@
 package com.example.tvbox.pojo.services.translation;
 
-import androidx.lifecycle.MutableLiveData;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -10,9 +10,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Translator {
     private static final String TAG = "Translator";
-    private final MutableLiveData<ResponseData> listOfMovies = new MutableLiveData<ResponseData>();
+    private ArrayList<ResponseData> listOfMovies = new ArrayList<>();
 
-    public MutableLiveData<ResponseData> translate (String title, String language) {
+    public void translate (String title, String language) {
 
         String baseUrl = "https://api.mymemory.translated.net/get?q=";
 
@@ -28,14 +28,21 @@ public class Translator {
         call.enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
-                listOfMovies.setValue(response.body());
+                setListOfMovies(response.body());
             }
 
             @Override
             public void onFailure(Call<ResponseData> call, Throwable t) {
-                listOfMovies.postValue(null);
+                setListOfMovies(null);
             }
         });
+    }
+
+    public ArrayList<ResponseData> getListOfMovies() {
         return listOfMovies;
+    }
+
+    private void setListOfMovies(ResponseData item) {
+        this.listOfMovies.add(item);
     }
 }

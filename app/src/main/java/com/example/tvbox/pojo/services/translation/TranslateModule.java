@@ -1,6 +1,5 @@
 package com.example.tvbox.pojo.services.translation;
 
-
 public class TranslateModule {
     String translatedText;
     Double match;
