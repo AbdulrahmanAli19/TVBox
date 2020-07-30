@@ -15,10 +15,10 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<ArrayList<ShowModule>> mutableLiveData = new MutableLiveData<>();
     private ScrapeData scrapeData = new ScrapeData();
 
-    public void execute() {
+    public void execute() throws InterruptedException {
         scrapeData.execute();
         while (scrapeData.isDataReady()){
-
+            TimeUnit.MICROSECONDS.sleep(1000);
         }
         mutableLiveData.setValue(getDataFromWeb());
     }

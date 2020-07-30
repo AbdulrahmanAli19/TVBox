@@ -1,5 +1,7 @@
 package com.example.tvbox.pojo.services.translation;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -25,17 +27,18 @@ public class Translator {
         ApiTranslatorInterface apiInterface = retrofit.create(ApiTranslatorInterface.class);
         Call<ResponseData> call = apiInterface
                 .getTranslatedTitle(baseUrl + title + "&langpair=pl|" + language);
-        call.enqueue(new Callback<ResponseData>() {
-            @Override
-            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
-                setListOfMovies(response.body());
-            }
+       call.enqueue(new Callback<ResponseData>() {
+           @Override
+           public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
+               setListOfMovies(response.body());
+               Log.d(TAG, "onResponse: "+response.body().getResponseData().getTranslatedText());
+           }
 
-            @Override
-            public void onFailure(Call<ResponseData> call, Throwable t) {
-                setListOfMovies(null);
-            }
-        });
+           @Override
+           public void onFailure(Call<ResponseData> call, Throwable t) {
+
+           }
+       });
     }
 
     public ArrayList<ResponseData> getListOfMovies() {

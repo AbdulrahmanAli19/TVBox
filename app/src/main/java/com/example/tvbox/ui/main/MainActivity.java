@@ -2,7 +2,6 @@ package com.example.tvbox.ui.main;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -30,17 +29,17 @@ public class MainActivity extends AppCompatActivity {
         final ShowListAdapter listAdapter = new ShowListAdapter();
         try {
             viewModel.execute();
-        }catch (Exception ex){
-            Log.d(TAG, "onCreate: "+ex);
+        } catch (Exception ex) {
+            Log.d(TAG, "onCreate: " + ex);
         }
 
         viewModel.mutableLiveData.observe(this, new Observer<ArrayList<ShowModule>>() {
             @Override
             public void onChanged(ArrayList<ShowModule> showModules) {
-                Log.d(TAG, "onChanged: called");
                 listAdapter.setArrayList(showModules);
             }
         });
+
         binding.showRecyclerView.setAdapter(listAdapter);
         binding.showRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
